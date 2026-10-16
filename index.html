@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>E-Commerce Website</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #f2f2f2;
+    }
+    input, button {
+      padding: 10px;
+      margin: 8px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .product {
+      display: inline-block;
+      background: white;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>My E-Commerce Store</h1>
+
+<div id="loginPage">
+  <h2>Login</h2>
+  <input type="text" id="username"
+         placeholder="Username">
+  <input type="password" id="password"
+         placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="productPage" style="display:none">
+  <h2 id="welcome"></h2>
+  <h2>Available Products</h2>
+  <div id="products"></div>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+  const products = [
+    {name: "Laptop", price: 50000},
+    {name: "Mobile", price: 20000},
+    {name: "Headphones", price: 2000}
+  ];
+
+  function login() {
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
+
+    if (user.trim() !== "" && pass.trim() !== "") {
+      localStorage.setItem("username", user);
+      showProducts();
+    } else {
+      alert("Enter username and password");
+    }
+  }
+
+  function showProducts() {
+    let user = localStorage.getItem("username");
+
+    if (!user) {
+      return;
+    }
+
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("productPage").style.display = "block";
+    document.getElementById("welcome").innerText =
+      "Welcome, " + user;
+
+    let container = document.getElementById("products");
+    container.innerHTML = "";
+
+    products.forEach(function(product) {
+      let div = document.createElement("div");
+      div.className = "product";
+
+      let name = document.createElement("h3");
+      name.textContent = product.name;
+
+      let price = document.createElement("p");
+      price.textContent = "Price: ₹" + product.price;
+
+      div.appendChild(name);
+      div.appendChild(price);
+      container.appendChild(div);
+    });
+  }
+
+  function logout() {
+    localStorage.removeItem("username");
+    document.getElementById("productPage").style.display = "none";
+    document.getElementById("loginPage").style.display = "block";
+    document.getElementById("password").value = "";
+  }
+
+  window.onload = function() {
+    if (localStorage.getItem("username")) {
+      showProducts();
+    }
+  };
+</script>
+
+</body>
+</html>
